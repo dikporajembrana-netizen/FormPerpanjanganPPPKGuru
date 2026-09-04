@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Data PPPK Jembrana</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Tailwind gray-100 */
+        }
+        /* Custom scrollbar untuk list dropdown */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 sm:p-8">
+
+    <div class="bg-white w-full max-w-lg rounded-2xl shadow-xl overflow-hidden">
+        <div class="bg-[#4B5320] px-6 py-8 text-center text-white">
+            <h2 class="text-2xl font-bold mb-1">Form Konfirmasi Perpanjangan PPPK Guru</h2>
+            <p class="text-[#E2E8C0] text-sm">Dinas Pendidikan Kepemudaan dan Olahraga Kabupaten Jembrana</p>
+        </div>
+        
+        <div class="p-6 sm:p-8">
+            <form id="pppkForm" class="space-y-5">
+                
+                <!-- Input Nama -->
+                <div>
+                    <label for="nama" class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap (beserta gelar)</label>
+                    <input type="text" id="nama" name="nama" required placeholder="Contoh: I Putu Budiarta, S.Pd." 
+                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#4B5320] focus:border-[#4B5320] outline-none transition-all">
+                </div>
+
+                <!-- Input NIPPPK -->
+                <div>
+                    <label for="nipppk" class="block text-sm font-medium text-gray-700 mb-1">NIPPPK</label>
+                    <input type="text" id="nipppk" name="nipppk" required placeholder="Contoh: 199001012022211001" pattern="[0-9]{18}" title="NIPPPK harus 18 digit angka"
+                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#4B5320] focus:border-[#4B5320] outline-none transition-all">
+                </div>
+
+                <!-- Input Tanggal TMT (Baru) -->
+                <div>
+                    <label for="tanggalTmt" class="block text-sm font-medium text-gray-700 mb-1">Tanggal TMT</label>
+                    <select id="tanggalTmt" name="tanggalTmt" required
+                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#4B5320] focus:border-[#4B5320] outline-none transition-all bg-white">
+                        <option value="" disabled selected>Pilih Tanggal TMT...</option>
+                        <option value="1 Pebruari 2022">1 Pebruari 2022</option>
+                        <option value="1 Maret 2022">1 Maret 2022</option>
+                    </select>
+                </div>
+
+                <!-- Input Nomor Surat SK (Baru) -->
+                <div>
+                    <label for="nomorSk" class="block text-sm font-medium text-gray-700 mb-1">Nomor Surat SK</label>
+                    <input type="text" id="nomorSk" name="nomorSk" required placeholder="Contoh: 813/123/BKPSDM/2022"
+                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#4B5320] focus:border-[#4B5320] outline-none transition-all">
+                </div>
+
+                <!-- Input Pangkat/Golongan (Searchable Dropdown) -->
+                <div class="relative">
+                    <label for="pangkat" class="block text-sm font-medium text-gray-700 mb-1">Pangkat / Golongan Ruang</label>
+                    <input type="text" id="pangkat" name="pangkat" required placeholder="Ketik atau pilih pangkat..." autocomplete="off"
+                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#4B5320] focus:border-[#4B5320] outline-none transition-all">
+                    <ul id="pangkatList" class="hidden absolute z-20 w-full bg-white border border-gray-200 mt-1 max-h-48 overflow-y-auto rounded-lg shadow-lg custom-scrollbar"></ul>
+                </div>
+
+                <!-- Input Jabatan (Searchable Dropdown) -->
+                <div class="relative">
+                    <label for="jabatan" class="block text-sm font-medium text-gray-700 mb-1">Jabatan</label>
+                    <input type="text" id="jabatan" name="jabatan" required placeholder="Ketik atau pilih jabatan..." autocomplete="off"
+                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#4B5320] focus:border-[#4B5320] outline-none transition-all">
+                    <ul id="jabatanList" class="hidden absolute z-20 w-full bg-white border border-gray-200 mt-1 max-h-48 overflow-y-auto rounded-lg shadow-lg custom-scrollbar"></ul>
+                </div>
+
+                <!-- Input Unit Kerja (Searchable Dropdown) -->
+                <div class="relative">
+                    <label for="unitKerja" class="block text-sm font-medium text-gray-700 mb-1">Unit Kerja (Sekolah)</label>
+                    <input type="text" id="unitKerja" name="unitKerja" required placeholder="Cari nama sekolah (Misal: SDN 1 Negara)" autocomplete="off"
+                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#4B5320] focus:border-[#4B5320] outline-none transition-all">
+                    <ul id="unitKerjaList" class="hidden absolute z-10 w-full bg-white border border-gray-200 mt-1 max-h-56 overflow-y-auto rounded-lg shadow-lg custom-scrollbar"></ul>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" id="submitBtn" class="w-full bg-[#4B5320] hover:bg-[#3A4018] text-white font-semibold py-3 px-4 rounded-lg shadow-md transition-colors flex justify-center items-center">
+                        <span id="btnText">Kirim Data</span>
+                        <!-- Spinner loading (hidden by default) -->
+                        <svg id="btnSpinner" class="hidden animate-spin ml-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Custom Modal -->
+    <div id="customModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden flex-col items-center justify-center z-50 px-4 transition-opacity duration-300 opacity-0">
+        <div class="bg-white rounded-xl shadow-2xl p-6 sm:p-8 max-w-sm w-full transform scale-95 transition-transform duration-300" id="modalCard">
+            <div class="text-center">
+                <div id="modalIcon" class="mx-auto flex items-center justify-center h-12 w-12 rounded-full mb-4">
+                    <!-- Icon disisipkan via JS -->
+                </div>
+                <h3 id="modalTitle" class="text-lg font-bold text-gray-900 mb-2"></h3>
+                <p id="modalMessage" class="text-sm text-gray-500 mb-6"></p>
+                <button type="button" onclick="closeModal()" class="w-full inline-flex justify-center rounded-lg border border-transparent bg-[#4B5320] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#3A4018] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4B5320] focus-visible:ring-offset-2 transition-colors">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Konfirmasi -->
+    <div id="confirmModal" class="fixed inset-0 bg-gray-900 bg-opacity-60 hidden flex-col items-center justify-center z-50 px-4 transition-opacity duration-300 opacity-0">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md transform scale-95 transition-transform duration-300 flex flex-col max-h-[90vh]" id="confirmCard">
+            <!-- Header Modal -->
+            <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50 rounded-t-2xl">
+                <h3 class="text-lg font-bold text-gray-800">Konfirmasi Data</h3>
+                <button type="button" onclick="closeConfirmModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            
+            <!-- Body Modal (Scrollable) -->
+            <div class="px-6 py-4 overflow-y-auto custom-scrollbar flex-1">
+                <p class="text-sm text-gray-600 mb-4">Harap periksa kembali data Anda sebelum disimpan ke sistem.</p>
+                
+                <div class="space-y-3 text-sm">
+                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                        <span class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Nama Lengkap</span>
+                        <span id="confNama" class="font-medium text-gray-900 break-words"></span>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                        <span class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">NIPPPK</span>
+                        <span id="confNipppk" class="font-medium text-gray-900 break-words"></span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                            <span class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Tanggal TMT</span>
+                            <span id="confTmt" class="font-medium text-gray-900 break-words"></span>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                            <span class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">No. SK</span>
+                            <span id="confSk" class="font-medium text-gray-900 break-words"></span>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                        <span class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Pangkat/Golongan</span>
+                        <span id="confPangkat" class="font-medium text-gray-900 break-words"></span>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                        <span class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Jabatan</span>
+                        <span id="confJabatan" class="font-medium text-gray-900 break-words"></span>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                        <span class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Unit Kerja</span>
+                        <span id="confUnit" class="font-medium text-gray-900 break-words"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Modal -->
+            <div class="px-6 py-4 border-t border-gray-100 flex flex-col-reverse sm:flex-row gap-3 bg-white rounded-b-2xl">
+                <button type="button" onclick="closeConfirmModal()" class="w-full sm:w-1/3 justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors">
+                    Batal / Edit
+                </button>
+                <button type="button" id="btnProsesSimpan" onclick="processSimpanData()" class="w-full sm:w-2/3 flex justify-center items-center rounded-lg border border-transparent bg-[#4B5320] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#3A4018] transition-colors">
+                    <span id="btnProsesText">Ya, Simpan Sekarang</span>
+                    <svg id="btnProsesSpinner" class="hidden animate-spin ml-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /*
+        =============================================================================
+        URL WEB APP GOOGLE APPS SCRIPT
+        =============================================================================
+        */
+
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbye5vUIrLjQHlI5k3fGytToFtBgSzWp-vsUj_K6ukjxcZsW6Cj3VntgYLH9KJeAejA9/exec'; 
+
+        // Data Master Pangkat/Golongan Khusus PPPK
+        const dataPangkat = [
+            'Ahli Pertama - Golongan IX',
+            'Ahli Muda - Golongan X',
+            'Ahli Madya - Golongan XI',
+            'Ahli Utama - Golongan XII'
+        ];
+
+        // Data Master Jabatan Guru PPPK
+        const dataJabatan = [
+            'Guru Ahli Pertama - Guru Kelas',
+            'Guru Ahli Pertama - Guru Agama Hindu',
+            'Guru Ahli Pertama - Guru Agama Islam',
+            'Guru Ahli Pertama - Guru Agama Kristen',
+            'Guru Ahli Pertama - Guru Agama Budha',
+            'Guru Ahli Pertama - Guru Bahasa Indonesia',
+            'Guru Ahli Pertama - Guru Bahasa Inggris',
+            'Guru Ahli Pertama - Guru Matematika',
+            'Guru Ahli Pertama - Guru IPA',
+            'Guru Ahli Pertama - Guru IPS',
+            'Guru Ahli Pertama - Guru PPKn',
+            'Guru Ahli Pertama - Guru Penjasorkes (PJOK)',
+            'Guru Ahli Pertama - Guru Seni Budaya',
+            'Guru Ahli Pertama - Guru Prakarya',
+            'Guru Ahli Pertama - Guru TIK/Informatika',
+            'Guru Ahli Pertama - Guru Bimbingan Konseling (BK)'
+        ];
+
+        // Data Master Unit Kerja (Lengkap Se-Kabupaten Jembrana)
+        const dataUnitKerja = [
+            // SMP (Sekabupaten Jembrana)
+            'SMPN 1 Pekutatan', 'SMPN 2 Pekutatan', 'SMPN 1 Mendoyo', 'SMPN 2 Mendoyo', 'SMPN 3 Mendoyo',
+            'SMPN 4 Mendoyo', 'SMPN 5 Mendoyo', 'SMPN 1 Negara', 'SMPN 3 Negara', 'SMPN 2 Negara',
+            'SMPN 4 Negara', 'SMPN 5 Negara', 'SMPN 6 Negara', 'SMPN 1 Melaya', 'SMPN 2 Melaya',
+            'SMPN 3 Melaya', 'SMPN 4 Melaya', 'SMPN 5 Melaya', 
+            // UPT Kecamatan Pekutatan
+            'SDN 1 Medewi', 'SDN 2 Medewi', 'SDN 3 Medewi', 'SDN 4 Medewi', 'SDN 1 Pulukan',
+            'SDN 2 Pulukan', 'SDN 3 Pulukan', 'SDN 1 Pekutatan', 'SDN 2 Pekutatan', 'SDN 3 Pekutatan',
+            'SDN 4 Pekutatan', 'SDN 5 Pekutatan', 'SDN Pangyangan', 'SDN 1 Gumrih', 'SDN 2 Gumrih',
+            'SDN 1 Pengeragoan', 'SDN 2 Pengeragoan', 'SDN 3 Pengeragoan', 'SDN 1 Asahduren', 'SDN 2 Asahduren',
+            'SDN 3 Asahduren', 'SDN 1 Manggissari', 'SDN 2 Manggissari', 'TK Negeri Pembina Pekutatan', 
+            // UPT Kecamatan Mendoyo
+            'SDN 1 Mendoyo Dauh Tukad', 'SDN 2 Mendoyo Dauh Tukad', 'SDN 3 Mendoyo Dauh Tukad', 'SDN 1 Mendoyo Dangin Tukad', 'SDN 2 Mendoyo Dangin Tukad',
+            'SDN 1 Pohsanten', 'SDN 2 Pohsanten', 'SDN 3 Pohsanten', 'SDN 4 Pohsanten', 'SDN 5 Pohsanten',
+            'SDN 1 Pergung', 'SDN 2 Pergung', 'SDN 3 Pergung', 'SDN 1 Tegalcangkring', 'SDN 2 Tegalcangkring',
+            'SDN 3 Tegalcangkring', 'SDN 4 Tegalcangkring', 'SDN 5 Tegalcangkring', 'SDN 6 Tegalcangkring', 'SDN Delodbrawah',
+            'SDN 1 Penyaringan', 'SDN 2 Penyaringan', 'SDN 3 Penyaringan', 'SDN 4 Penyaringan', 'SDN 5 Penyaringan',
+            'SDN 6 Penyaringan', 'SDN 7 Penyaringan', 'SDN 8 Penyaringan', 'SDN 9 Penyaringan', 'SDN 1 Yehembang Kauh',
+            'SDN 2 Yehembang Kauh', 'SDN 3 Yehembang Kauh', 'SDN 4 Yehembang Kauh', 'SDN 5 Yehembang Kauh', 'SDN 1 Yehembang',
+            'SDN 2 Yehembang', 'SDN 3 Yehembang', 'SDN 4 Yehembang', 'SDN 5 Yehembang', 'SDN 6 Yehembang',
+            'SDN 7 Yehembang', 'SDN 1 Yehembang Kangin', 'SDN 2 Yehembang Kangin', 'SDN 3 Yehembang Kangin', 'SDN 1 Yeh Sumbul',
+            'SDN 2 Yeh Sumbul', 'SDN 3 Yeh Sumbul', 'TK Negeri Pembina Mendoyo', 
+            // UPT Kecamatan Jembrana
+            'SDN 1 Perancak', 'SDN 2 Perancak', 'SDN 1 Air Kuning', 'SDN 2 Air Kuning', 'SDN 1 Sangkaragung',
+            'SDN 2 Sangkaragung', 'SDN 1 Dangin Tukadaya', 'SDN 2 Dangin Tukadaya', 'SDN 3 Dangin Tukadaya', 'SDN 1 Dauhwaru',
+            'SDN 2 Dauhwaru', 'SDN 3 Dauhwaru', 'SDN 4 Dauhwaru', 'SDN 5 Dauhwaru', 'SDN 6 Dauhwaru',
+            'SDN 1 Batuagung', 'SDN 2 Batuagung', 'SDN 3 Batuagung', 'SDN 4 Batuagung', 'SDN 5 Batuagung',
+            'SDN 6 Batuagung', 'SDN Budeng', 'SDN 1 Pendem', 'SDN 2 Pendem', 'SDN 3 Pendem',
+            'SDN 4 Pendem', 'SDN 5 Pendem', 'SDN 6 Pendem', 'SDN 1 Loloan Timur', 'SDN 2 Loloan Timur',
+            'SDN 3 Loloan Timur', 'SDN 1 Yeh Kuning', 'SDN 2 Yeh Kuning', 'TKN Pembina Jembrana (Sangkaragung)', 'TKN Jembrana (Canang Sari)', 
+            // UPT Kecamatan Negara
+            'SDN 1 Loloan Barat', 'SDN 2 Loloan Barat', 'SDN 1 Baler Bale Agung', 'SDN 2 Baler Bale Agung', 'SDN 3 Baler Bale Agung',
+            'SDN 4 Baler Bale Agung', 'SDN 5 Baler Bale Agung', 'SDN 1 Banjar Tengah', 'SDN 2 Banjar Tengah', 'SDN 3 Banjar Tengah',
+            'SDN 1 Lelateng', 'SDN 2 Lelateng', 'SDN 3 Lelateng', 'SDN 4 Lelateng', 'SDN 1 Tegalbadeng Barat',
+            'SDN 2 Tegalbadeng Barat', 'SDN 3 Tegalbadeng Barat', 'SDN 1 Tegalbadeng Timur', 'SDN 2 Tegalbadeng Timur', 'SDN 1 Cupel',
+            'SDN 2 Cupel', 'SDN 1 Pengambengan', 'SDN 2 Pengambengan', 'SDN 3 Pengambengan', 'SDN 1 Baluk',
+            'SDN 2 Baluk', 'SDN 3 Baluk', 'SDN 4 Baluk', 'SDN 5 Baluk', 'SDN 1 Banyubiru',
+            'SDN 2 Banyubiru', 'SDN 3 Banyubiru', 'SDN 4 Banyubiru', 'SDN 1 Kaliakah', 'SDN 2 Kaliakah',
+            'SDN 3 Kaliakah', 'SDN 4 Kaliakah', 'SDN 5 Kaliakah', 'SDN 1 Berangbang', 'SDN 2 Berangbang',
+            'SDN 3 Berangbang', 'SDN 4 Berangbang', 'SDN 5 Berangbang', 'TK Negeri Negara', 'TK Negeri Pembina Negara', 
+            // UPT Kecamatan Melaya
+            'SDN 2 Gilimanuk', 'SDN 1 Gilimanuk', 'SDN 3 Gilimanuk', 'SDN 4 Gilimanuk', 'SDN 1 Melaya',
+            'SDN 2 Melaya', 'SDN 3 Melaya', 'SDN 4 Melaya', 'SDN 5 Melaya', 'SDN 6 Melaya',
+            'SDN 7 Melaya', 'SDN 1 Nusasari', 'SDN 2 Nusasari', 'SDN 1 Ekasari', 'SDN 2 Ekasari',
+            'SDN 1 Warnasari', 'SDN 2 Warnasari', 'SDN 1 Candikusuma', 'SDN 2 Candikusuma', 'SDN 3 Candikusuma',
+            'SDN 4 Candikusuma', 'SDN 1 Tuwed', 'SDN 2 Tuwed', 'SDN 3 Tuwed', 'SDN 1 Tukadaya',
+            'SDN 2 Tukadaya', 'SDN 3 Tukadaya', 'SDN 4 Tukadaya', 'SDN 5 Tukadaya', 'SDN 1 Manistutu',
+            'SDN 2 Manistutu', 'SDN 3 Manistutu', 'SDN 4 Manistutu', 'SDN 5 Manistutu', 'SDN 6 Manistutu',
+            'TK Negeri Melaya', 'TK Negeri Pembina Melaya', 
+            // Lainnya
+            'SKB'
+        ];
+
+        function setupSearchableDropdown(inputId, listId, dataArray) {
+            const input = document.getElementById(inputId);
+            const list = document.getElementById(listId);
+
+            function renderList(filter = '') {
+                list.innerHTML = '';
+                const filtered = dataArray.filter(item => item.toLowerCase().includes(filter.toLowerCase()));
+                
+                if (filtered.length === 0) {
+                    const li = document.createElement('li');
+                    li.textContent = 'Data tidak ditemukan';
+                    li.className = 'px-4 py-3 text-gray-500 text-sm italic';
+                    list.appendChild(li);
+                    return;
+                }
+
+                filtered.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = item;
+                    li.className = 'px-4 py-2.5 hover:bg-[#F4F5EF] cursor-pointer text-sm text-gray-700 border-b border-gray-100 last:border-0 transition-colors';
+                    
+                    li.addEventListener('mousedown', (e) => {
+                        e.preventDefault(); 
+                        input.value = item;
+                        list.classList.add('hidden');
+                    });
+                    list.appendChild(li);
+                });
+            }
+
+            input.addEventListener('focus', () => {
+                renderList(input.value);
+                list.classList.remove('hidden');
+            });
+
+            input.addEventListener('input', (e) => {
+                renderList(e.target.value);
+                list.classList.remove('hidden');
+            });
+
+            input.addEventListener('blur', () => {
+                setTimeout(() => {
+                    list.classList.add('hidden');
+                }, 150);
+            });
+        }
+
+        setupSearchableDropdown('pangkat', 'pangkatList', dataPangkat);
+        setupSearchableDropdown('jabatan', 'jabatanList', dataJabatan);
+        setupSearchableDropdown('unitKerja', 'unitKerjaList', dataUnitKerja);
+
+        const modal = document.getElementById('customModal');
+        const modalCard = document.getElementById('modalCard');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMessage = document.getElementById('modalMessage');
+        const modalIcon = document.getElementById('modalIcon');
+
+        function showModal(type, title, message) {
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            
+            if (type === 'success') {
+                modalIcon.className = 'mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4 text-green-600';
+                modalIcon.innerHTML = `<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>`;
+            } else if (type === 'error') {
+                modalIcon.className = 'mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4 text-red-600';
+                modalIcon.innerHTML = `<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>`;
+            } else {
+                modalIcon.className = 'mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-[#F4F5EF] mb-4 text-[#4B5320]';
+                modalIcon.innerHTML = `<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" /></svg>`;
+            }
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalCard.classList.remove('scale-95');
+                modalCard.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            modalCard.classList.remove('scale-100');
+            modalCard.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        }
+
+        const confirmModal = document.getElementById('confirmModal');
+        const confirmCard = document.getElementById('confirmCard');
+        
+        const form = document.getElementById('pppkForm');
+        let currentFormData = null;
+
+        function showConfirmModal() {
+            const formData = new FormData(form);
+            currentFormData = formData;
+            
+            document.getElementById('confNama').textContent = formData.get('nama') || '-';
+            document.getElementById('confNipppk').textContent = formData.get('nipppk') || '-';
+            document.getElementById('confTmt').textContent = formData.get('tanggalTmt') || '-';
+            document.getElementById('confSk').textContent = formData.get('nomorSk') || '-';
+            document.getElementById('confPangkat').textContent = formData.get('pangkat') || '-';
+            document.getElementById('confJabatan').textContent = formData.get('jabatan') || '-';
+            document.getElementById('confUnit').textContent = formData.get('unitKerja') || '-';
+
+            confirmModal.classList.remove('hidden');
+            confirmModal.classList.add('flex');
+            setTimeout(() => {
+                confirmModal.classList.remove('opacity-0');
+                confirmCard.classList.remove('scale-95');
+                confirmCard.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeConfirmModal() {
+            confirmModal.classList.add('opacity-0');
+            confirmCard.classList.remove('scale-100');
+            confirmCard.classList.add('scale-95');
+            setTimeout(() => {
+                confirmModal.classList.add('hidden');
+                confirmModal.classList.remove('flex');
+            }, 300);
+        }
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            if(GOOGLE_SCRIPT_URL === 'URL_GOOGLE_APPS_SCRIPT_ANDA_DISINI') {
+                showModal('info', 'Konfigurasi Diperlukan', 'Anda belum memasukkan URL Google Apps Script pada kode sumber.');
+                return;
+            }
+
+            showConfirmModal();
+        });
+
+        function processSimpanData() {
+            const btnProses = document.getElementById('btnProsesSimpan');
+            const btnProsesText = document.getElementById('btnProsesText');
+            const btnProsesSpinner = document.getElementById('btnProsesSpinner');
+
+            btnProses.disabled = true;
+            btnProses.classList.add('opacity-75', 'cursor-not-allowed');
+            btnProsesText.textContent = 'Menyimpan...';
+            btnProsesSpinner.classList.remove('hidden');
+
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                body: currentFormData,
+                mode: 'no-cors'
+            })
+            .then(() => {
+                closeConfirmModal();
+                setTimeout(() => {
+                    showModal('success', 'Berhasil Disimpan!', 'Data Anda telah tersimpan ke dalam Spreadsheet.');
+                    form.reset();
+                }, 400);
+            })
+            .catch(error => {
+                closeConfirmModal();
+                setTimeout(() => {
+                    showModal('error', 'Terjadi Kesalahan', 'Data gagal dikirim. Periksa koneksi internet Anda.');
+                }, 400);
+                console.error('Error!', error.message);
+            })
+            .finally(() => {
+                setTimeout(() => {
+                    btnProses.disabled = false;
+                    btnProses.classList.remove('opacity-75', 'cursor-not-allowed');
+                    btnProsesText.textContent = 'Ya, Simpan Sekarang';
+                    btnProsesSpinner.classList.add('hidden');
+                }, 500);
+            });
+        }
+    </script>
+</body>
+</html>
