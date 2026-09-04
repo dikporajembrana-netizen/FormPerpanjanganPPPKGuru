@@ -53,7 +53,7 @@
                         class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#4B5320] focus:border-[#4B5320] outline-none transition-all">
                 </div>
 
-                <!-- Input Tanggal TMT (Baru) -->
+                <!-- Input Tanggal TMT -->
                 <div>
                     <label for="tanggalTmt" class="block text-sm font-medium text-gray-700 mb-1">Tanggal TMT</label>
                     <select id="tanggalTmt" name="tanggalTmt" required
@@ -64,7 +64,7 @@
                     </select>
                 </div>
 
-                <!-- Input Nomor Surat SK (Baru) -->
+                <!-- Input Nomor Surat SK -->
                 <div>
                     <label for="nomorSk" class="block text-sm font-medium text-gray-700 mb-1">Nomor Surat SK</label>
                     <input type="text" id="nomorSk" name="nomorSk" required placeholder="Contoh: 813/123/BKPSDM/2022"
@@ -95,6 +95,22 @@
                     <ul id="unitKerjaList" class="hidden absolute z-10 w-full bg-white border border-gray-200 mt-1 max-h-56 overflow-y-auto rounded-lg shadow-lg custom-scrollbar"></ul>
                 </div>
 
+                <!-- Input Regrouping (Baru) -->
+                <div class="p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="regrouping" name="regrouping" value="Ya" 
+                            class="w-4 h-4 text-[#4B5320] bg-white border-gray-300 rounded focus:ring-[#4B5320] cursor-pointer">
+                        <label for="regrouping" class="ml-2 text-sm font-medium text-gray-800 cursor-pointer">Centang jika sekolah mengalami Regrouping</label>
+                    </div>
+                    
+                    <!-- Kolom Keterangan Hidden -->
+                    <div id="keteranganContainer" class="hidden transition-all duration-300 mt-3">
+                        <label for="keterangan" class="block text-sm font-medium text-gray-700 mb-1">Keterangan Regrouping</label>
+                        <textarea id="keterangan" name="keterangan" rows="2" placeholder="Masukkan keterangan (misal: Gabung dengan SDN 2 Negara)..."
+                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#4B5320] focus:border-[#4B5320] outline-none transition-all"></textarea>
+                    </div>
+                </div>
+
                 <div class="pt-4">
                     <button type="submit" id="submitBtn" class="w-full bg-[#4B5320] hover:bg-[#3A4018] text-white font-semibold py-3 px-4 rounded-lg shadow-md transition-colors flex justify-center items-center">
                         <span id="btnText">Kirim Data</span>
@@ -109,7 +125,7 @@
         </div>
     </div>
 
-    <!-- Custom Modal -->
+    <!-- Custom Modal Informasi/Sukses/Error -->
     <div id="customModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden flex-col items-center justify-center z-50 px-4 transition-opacity duration-300 opacity-0">
         <div class="bg-white rounded-xl shadow-2xl p-6 sm:p-8 max-w-sm w-full transform scale-95 transition-transform duration-300" id="modalCard">
             <div class="text-center">
@@ -125,7 +141,7 @@
         </div>
     </div>
 
-    <!-- Modal Konfirmasi -->
+    <!-- Modal Konfirmasi Data -->
     <div id="confirmModal" class="fixed inset-0 bg-gray-900 bg-opacity-60 hidden flex-col items-center justify-center z-50 px-4 transition-opacity duration-300 opacity-0">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md transform scale-95 transition-transform duration-300 flex flex-col max-h-[90vh]" id="confirmCard">
             <!-- Header Modal -->
@@ -170,6 +186,16 @@
                     <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
                         <span class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Unit Kerja</span>
                         <span id="confUnit" class="font-medium text-gray-900 break-words"></span>
+                    </div>
+                    
+                    <!-- Konfirmasi Regrouping (Baru) -->
+                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                        <span class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Status Regrouping</span>
+                        <span id="confRegrouping" class="font-medium text-gray-900 break-words"></span>
+                    </div>
+                    <div id="confKeteranganContainer" class="bg-gray-50 p-3 rounded-lg border border-gray-100 hidden">
+                        <span class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Keterangan Regrouping</span>
+                        <span id="confKeterangan" class="font-medium text-gray-900 break-words"></span>
                     </div>
                 </div>
             </div>
@@ -333,6 +359,27 @@
         setupSearchableDropdown('jabatan', 'jabatanList', dataJabatan);
         setupSearchableDropdown('unitKerja', 'unitKerjaList', dataUnitKerja);
 
+        // ==========================================
+        // LOGIKA BARU: Toggle Regrouping Checkbox
+        // ==========================================
+        const regroupingCheckbox = document.getElementById('regrouping');
+        const keteranganContainer = document.getElementById('keteranganContainer');
+        const keteranganInput = document.getElementById('keterangan');
+
+        regroupingCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                keteranganContainer.classList.remove('hidden');
+                keteranganInput.required = true;
+            } else {
+                keteranganContainer.classList.add('hidden');
+                keteranganInput.required = false;
+                keteranganInput.value = ''; // Reset isian jika batal centang
+            }
+        });
+
+        // ==========================================
+        // LOGIKA MODAL
+        // ==========================================
         const modal = document.getElementById('customModal');
         const modalCard = document.getElementById('modalCard');
         const modalTitle = document.getElementById('modalTitle');
@@ -384,6 +431,7 @@
             const formData = new FormData(form);
             currentFormData = formData;
             
+            // Set Data Dasar
             document.getElementById('confNama').textContent = formData.get('nama') || '-';
             document.getElementById('confNipppk').textContent = formData.get('nipppk') || '-';
             document.getElementById('confTmt').textContent = formData.get('tanggalTmt') || '-';
@@ -391,6 +439,17 @@
             document.getElementById('confPangkat').textContent = formData.get('pangkat') || '-';
             document.getElementById('confJabatan').textContent = formData.get('jabatan') || '-';
             document.getElementById('confUnit').textContent = formData.get('unitKerja') || '-';
+
+            // Set Data Regrouping di Modal
+            const isRegrouping = formData.get('regrouping') ? 'Ya' : 'Tidak';
+            document.getElementById('confRegrouping').textContent = isRegrouping;
+            
+            if (isRegrouping === 'Ya') {
+                document.getElementById('confKeteranganContainer').classList.remove('hidden');
+                document.getElementById('confKeterangan').textContent = formData.get('keterangan') || '-';
+            } else {
+                document.getElementById('confKeteranganContainer').classList.add('hidden');
+            }
 
             confirmModal.classList.remove('hidden');
             confirmModal.classList.add('flex');
@@ -442,6 +501,8 @@
                 setTimeout(() => {
                     showModal('success', 'Berhasil Disimpan!', 'Data Anda telah tersimpan ke dalam Spreadsheet.');
                     form.reset();
+                    // Reset hide keterangan form saat submit sukses
+                    keteranganContainer.classList.add('hidden');
                 }, 400);
             })
             .catch(error => {
