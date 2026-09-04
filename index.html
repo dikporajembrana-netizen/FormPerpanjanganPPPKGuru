@@ -53,15 +53,27 @@
         
         <div class="p-6 sm:p-8">
             <!-- Box Pencarian NIPPPK (Hanya muncul saat mode Ubah Data) -->
-            <div id="searchBox" class="hidden mb-6 p-4 bg-amber-50 border border-amber-200 rounded-xl">
-                <label for="searchNip" class="block text-xs font-semibold text-amber-900 uppercase tracking-wider mb-1">
+            <div id="searchBox" class="hidden mb-6 p-4 sm:p-5 bg-amber-50/90 border border-amber-200 rounded-xl shadow-sm">
+                <label for="searchNip" class="block text-xs font-semibold text-amber-900 uppercase tracking-wider mb-2">
                     Langkah 1: Masukkan 18 Digit NIPPPK
                 </label>
-                <div class="flex gap-2 mt-2">
-                    <input type="text" id="searchNip" placeholder="Masukkan 18 digit NIPPPK..." maxlength="18"
-                        class="flex-1 px-3 py-2 text-sm rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#4B5320] focus:border-[#4B5320] outline-none bg-white">
+                <!-- Layout Responsif: Memanjang rapi di smartphone & sejajar di tablet/desktop -->
+                <div class="flex flex-col sm:flex-row gap-2.5">
+                    <div class="relative flex-1">
+                        <input type="text" id="searchNip" placeholder="Ketik atau tempel 18 digit NIPPPK..." maxlength="18" inputmode="numeric"
+                            class="w-full pl-3.5 pr-9 py-2.5 text-sm rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#4B5320] focus:border-[#4B5320] outline-none bg-white font-mono transition-all shadow-sm">
+                        <!-- Tombol Hapus Cepat (Clear Input) -->
+                        <button type="button" id="btnClearSearch" onclick="clearSearchNip()" title="Hapus teks NIP"
+                            class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-100 transition-colors focus:outline-none">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
+                    </div>
+                    <!-- Tombol Cari Responsif: Area sentuh luas (min 42px), efek sentuh active scale, ikon kaca pembesar & animasi putar -->
                     <button type="button" id="btnCari" onclick="cariData()" 
-                        class="bg-[#4B5320] hover:bg-[#3A4018] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-1.5 whitespace-nowrap">
+                        class="w-full sm:w-auto min-h-[42px] bg-[#4B5320] hover:bg-[#3A4018] active:scale-[0.98] text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150 flex items-center justify-center gap-2 shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-[#4B5320] outline-none disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer">
+                        <svg id="btnCariIcon" class="w-4 h-4 transition-transform duration-150" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
                         <span id="btnCariText">Cari Data</span>
                         <svg id="btnCariSpinner" class="hidden animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -89,7 +101,7 @@
                 <div>
                     <label for="nipppk" class="block text-sm font-medium text-gray-700 mb-1">NIPPPK</label>
                     <input type="text" id="nipppk" name="nipppk" required placeholder="Contoh: 199001012022211001" pattern="[0-9]{18}" title="NIPPPK harus 18 digit angka" maxlength="18"
-                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#4B5320] focus:border-[#4B5320] outline-none transition-all">
+                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#4B5320] focus:border-[#4B5320] outline-none transition-all font-mono">
                 </div>
 
                 <!-- Input Tanggal TMT (Kolom D) -->
@@ -163,7 +175,7 @@
         </div>
     </div>
 
-    <!-- Custom Modal Pesan (Sukses/Error/Info) -->
+    <!-- Custom Modal Pesan -->
     <div id="customModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden flex-col items-center justify-center z-50 px-4 transition-opacity duration-300 opacity-0">
         <div class="bg-white rounded-xl shadow-2xl p-6 sm:p-8 max-w-sm w-full transform scale-95 transition-transform duration-300" id="modalCard">
             <div class="text-center">
@@ -197,7 +209,7 @@
                     </div>
                     <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
                         <span class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">NIPPPK</span>
-                        <span id="confNipppk" class="font-medium text-gray-900 break-words"></span>
+                        <span id="confNipppk" class="font-medium text-gray-900 break-words font-mono"></span>
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
@@ -236,7 +248,7 @@
                 <button type="button" onclick="closeConfirmModal()" class="w-full sm:w-1/3 justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors">
                     Batal / Edit
                 </button>
-                <button type="button" id="btnProsesSimpan" onclick="processSimpanData()" class="w-full sm:w-2/3 flex justify-center items-center rounded-lg border border-transparent bg-[#4B5320] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#3A4018] transition-colors">
+                <button type="button" id="btnProsesSimpan" onclick="processSimpanData()" class="w-full sm:w-2/3 flex justify-center items-center rounded-lg border border-transparent bg-[#4B5320] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#3A4018] transition-colors shadow-sm">
                     <span id="btnProsesText">Ya, Simpan Sekarang</span>
                     <svg id="btnProsesSpinner" class="hidden animate-spin ml-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -248,12 +260,10 @@
     </div>
 
     <script>
-        /* URL Web App Google Apps Script Anda */
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyNBhC1Et7r00ADsjrOc7Qo9w7EqJ8yI9-pmHw5bzM_szjxvtn38uhzq4t7j66CEmsF/exec';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbye5vUIrLjQHlI5k3fGytToFtBgSzWp-vsUj_K6ukjxcZsW6Cj3VntgYLH9KJeAejA9/exec';
 
         let currentMode = 'insert';
 
-        // Data Master Pangkat/Golongan
         const dataPangkat = [
             'Ahli Pertama - Golongan IX',
             'Ahli Muda - Golongan X',
@@ -261,7 +271,6 @@
             'Ahli Utama - Golongan XII'
         ];
 
-        // Data Master Jabatan Guru PPPK
         const dataJabatan = [
             'Guru Ahli Pertama - Guru Kelas',
             'Guru Ahli Pertama - Guru Agama Hindu',
@@ -281,7 +290,6 @@
             'Guru Ahli Pertama - Guru Bimbingan Konseling (BK)'
         ];
 
-        // Data Master Unit Kerja Lengkap Se-Kabupaten Jembrana
         const dataUnitKerja = [
             'SMPN 1 Pekutatan', 'SMPN 2 Pekutatan', 'SMPN 1 Mendoyo', 'SMPN 2 Mendoyo', 'SMPN 3 Mendoyo',
             'SMPN 4 Mendoyo', 'SMPN 5 Mendoyo', 'SMPN 1 Negara', 'SMPN 3 Negara', 'SMPN 2 Negara',
@@ -329,9 +337,7 @@
             'SKB'
         ];
 
-        // ==========================================
-        // FITUR GANTI MODE: INSERT VS UPDATE
-        // ==========================================
+        // Mode Switching
         function switchMode(mode) {
             currentMode = mode;
             const tabTambah = document.getElementById('tabTambah');
@@ -346,6 +352,8 @@
             document.getElementById('keteranganContainer').classList.add('hidden');
             document.getElementById('searchFeedback').classList.add('hidden');
             document.getElementById('originalNipppk').value = '';
+            const btnClear = document.getElementById('btnClearSearch');
+            if (btnClear) btnClear.classList.add('hidden');
 
             if (mode === 'update') {
                 tabUbah.className = 'flex-1 py-3 px-4 text-center border-b-2 border-[#4B5320] text-[#4B5320] font-semibold transition-all flex items-center justify-center gap-2';
@@ -355,6 +363,7 @@
                 formAction.value = 'update';
                 nipppkInput.readOnly = true;
                 nipppkInput.classList.add('bg-gray-100', 'cursor-not-allowed');
+                document.getElementById('searchNip').focus();
             } else {
                 tabTambah.className = 'flex-1 py-3 px-4 text-center border-b-2 border-[#4B5320] text-[#4B5320] font-semibold transition-all flex items-center justify-center gap-2';
                 tabUbah.className = 'flex-1 py-3 px-4 text-center border-b-2 border-transparent text-gray-500 hover:text-gray-700 transition-all flex items-center justify-center gap-2';
@@ -366,14 +375,58 @@
             }
         }
 
-        // ==========================================
-        // FITUR CARI DATA DARI SPREADSHEET (NIPPPK)
-        // ==========================================
-        function cariData() {
+        // Fast JSONP Handler
+        function requestGasApi(params, timeoutMs = 8000) {
+            return new Promise((resolve, reject) => {
+                const callbackName = 'gasCb_' + Math.floor(Math.random() * 1000000);
+                const script = document.createElement('script');
+                let isCompleted = false;
+
+                const query = new URLSearchParams(params);
+                query.set('callback', callbackName);
+
+                const timer = setTimeout(() => {
+                    if (!isCompleted) {
+                        isCompleted = true;
+                        cleanup();
+                        reject(new Error('TIMEOUT'));
+                    }
+                }, timeoutMs);
+
+                function cleanup() {
+                    if (timer) clearTimeout(timer);
+                    if (script.parentNode) script.parentNode.removeChild(script);
+                    delete window[callbackName];
+                }
+
+                window[callbackName] = function(data) {
+                    if (!isCompleted) {
+                        isCompleted = true;
+                        cleanup();
+                        resolve(data);
+                    }
+                };
+
+                script.onerror = function() {
+                    if (!isCompleted) {
+                        isCompleted = true;
+                        cleanup();
+                        reject(new Error('SCRIPT_LOAD_ERROR'));
+                    }
+                };
+
+                script.src = `${GOOGLE_SCRIPT_URL}?${query.toString()}`;
+                document.head.appendChild(script);
+            });
+        }
+
+        // Pencarian Data Cepat
+        async function cariData() {
             const searchNip = document.getElementById('searchNip').value.trim();
             const btnCari = document.getElementById('btnCari');
             const btnCariText = document.getElementById('btnCariText');
             const btnCariSpinner = document.getElementById('btnCariSpinner');
+            const btnCariIcon = document.getElementById('btnCariIcon');
             const feedback = document.getElementById('searchFeedback');
 
             if (!searchNip) {
@@ -383,63 +436,101 @@
 
             btnCari.disabled = true;
             btnCariText.textContent = 'Mencari...';
+            if (btnCariIcon) btnCariIcon.classList.add('hidden');
             btnCariSpinner.classList.remove('hidden');
             feedback.classList.add('hidden');
 
-            fetch(`${GOOGLE_SCRIPT_URL}?action=search&nipppk=${encodeURIComponent(searchNip)}`)
-                .then(response => response.json())
-                .then(res => {
-                    if (res && res.status === 'success' && res.data) {
-                        const d = res.data;
-                        // Isi data ke form otomatis
-                        document.getElementById('nama').value = d.nama || '';
-                        document.getElementById('nipppk').value = d.nipppk || searchNip;
-                        document.getElementById('originalNipppk').value = d.nipppk || searchNip;
-                        document.getElementById('tanggalTmt').value = d.tanggalTmt || '';
-                        document.getElementById('nomorSk').value = d.nomorSk || '';
-                        document.getElementById('pangkat').value = d.pangkat || '';
-                        document.getElementById('jabatan').value = d.jabatan || '';
-                        document.getElementById('unitKerja').value = d.unitKerja || '';
-                        
-                        // Status Regrouping
-                        const isRegroup = (d.regrouping === 'Ya' || d.regrouping === true);
-                        document.getElementById('regrouping').checked = isRegroup;
-                        const ketContainer = document.getElementById('keteranganContainer');
-                        const ketInput = document.getElementById('keterangan');
-                        
-                        if (isRegroup) {
-                            ketContainer.classList.remove('hidden');
-                            ketInput.required = true;
-                            ketInput.value = d.keterangan || '';
-                        } else {
-                            ketContainer.classList.add('hidden');
-                            ketInput.required = false;
-                            ketInput.value = '';
-                        }
+            try {
+                let res;
+                try {
+                    res = await requestGasApi({ action: 'search', nipppk: searchNip });
+                } catch (jsonpErr) {
+                    const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=search&nipppk=${encodeURIComponent(searchNip)}`);
+                    res = await response.json();
+                }
 
-                        feedback.textContent = `Data ditemukan untuk NIPPPK: ${searchNip}. Silakan ubah data di bawah jika diperlukan.`;
-                        feedback.className = 'text-xs text-green-700 font-medium mt-2 block';
-                        showModal('success', 'Data Ditemukan', `Data atas nama "${d.nama}" berhasil dimuat ke formulir.`);
+                if (res && res.status === 'success' && res.data) {
+                    const d = res.data;
+                    document.getElementById('nama').value = d.nama || '';
+                    document.getElementById('nipppk').value = d.nipppk || searchNip;
+                    document.getElementById('originalNipppk').value = d.nipppk || searchNip;
+                    document.getElementById('tanggalTmt').value = d.tanggalTmt || '';
+                    document.getElementById('nomorSk').value = d.nomorSk || '';
+                    document.getElementById('pangkat').value = d.pangkat || '';
+                    document.getElementById('jabatan').value = d.jabatan || '';
+                    document.getElementById('unitKerja').value = d.unitKerja || '';
+                    
+                    const isRegroup = (d.regrouping === 'Ya' || d.regrouping === true);
+                    document.getElementById('regrouping').checked = isRegroup;
+                    const ketContainer = document.getElementById('keteranganContainer');
+                    const ketInput = document.getElementById('keterangan');
+                    
+                    if (isRegroup) {
+                        ketContainer.classList.remove('hidden');
+                        ketInput.required = true;
+                        ketInput.value = d.keterangan || '';
                     } else {
-                        feedback.textContent = `Data dengan NIPPPK ${searchNip} tidak ditemukan.`;
-                        feedback.className = 'text-xs text-red-600 font-medium mt-2 block';
-                        showModal('error', 'Data Tidak Ditemukan', res.message || `Tidak ada data dengan NIPPPK ${searchNip} pada Spreadsheet.`);
+                        ketContainer.classList.add('hidden');
+                        ketInput.required = false;
+                        ketInput.value = '';
                     }
-                })
-                .catch(err => {
-                    console.error(err);
-                    showModal('error', 'Koneksi Gagal', 'Gagal memuat data dari Spreadsheet. Pastikan koneksi lancar dan Web App dideploy sebagai "Anyone".');
-                })
-                .finally(() => {
-                    btnCari.disabled = false;
-                    btnCariText.textContent = 'Cari Data';
-                    btnCariSpinner.classList.add('hidden');
-                });
+
+                    const speedInfo = d.source === 'cache' ? ' (Dimuat instan dari cache)' : '';
+                    feedback.textContent = `Data ditemukan untuk NIPPPK: ${searchNip}${speedInfo}. Silakan periksa atau ubah data di bawah.`;
+                    feedback.className = 'text-xs text-green-700 font-medium mt-2 block';
+                    showModal('success', 'Data Ditemukan', `Data atas nama "${d.nama}" berhasil dimuat.`);
+                } else {
+                    feedback.textContent = `Data dengan NIPPPK ${searchNip} tidak ditemukan.`;
+                    feedback.className = 'text-xs text-red-600 font-medium mt-2 block';
+                    showModal('error', 'Data Tidak Ditemukan', (res && res.message) ? res.message : `Tidak ada data dengan NIPPPK ${searchNip}.`);
+                }
+            } catch (err) {
+                console.error('Error saat cariData:', err);
+                showModal('error', 'Gagal Mencari Data', 'Koneksi ke server terputus atau respon terlalu lambat. Coba beberapa saat lagi.');
+            } finally {
+                btnCari.disabled = false;
+                btnCariText.textContent = 'Cari Data';
+                if (btnCariIcon) btnCariIcon.classList.remove('hidden');
+                btnCariSpinner.classList.add('hidden');
+            }
         }
 
-        // ==========================================
-        // AUTOCOMPLETE / SEARCHABLE DROPDOWN
-        // ==========================================
+        // Helper untuk menghapus input NIP dengan cepat
+        function clearSearchNip() {
+            const input = document.getElementById('searchNip');
+            input.value = '';
+            document.getElementById('btnClearSearch').classList.add('hidden');
+            document.getElementById('searchFeedback').classList.add('hidden');
+            input.focus();
+        }
+
+        const searchInput = document.getElementById('searchNip');
+        const clearBtn = document.getElementById('btnClearSearch');
+
+        // Deteksi input teks untuk menampilkan tombol silang & auto-search 18 digit
+        searchInput.addEventListener('input', function(e) {
+            const val = e.target.value.trim();
+            if (clearBtn) {
+                if (val.length > 0) {
+                    clearBtn.classList.remove('hidden');
+                } else {
+                    clearBtn.classList.add('hidden');
+                }
+            }
+            if (val.length === 18 && /^\d+$/.test(val)) {
+                cariData();
+            }
+        });
+
+        // Responsif terhadap tombol Enter keyboard
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                cariData();
+            }
+        });
+
+        // Dropdown Searchable
         function setupSearchableDropdown(inputId, listId, dataArray) {
             const input = document.getElementById(inputId);
             const list = document.getElementById(listId);
@@ -491,9 +582,7 @@
         setupSearchableDropdown('jabatan', 'jabatanList', dataJabatan);
         setupSearchableDropdown('unitKerja', 'unitKerjaList', dataUnitKerja);
 
-        // ==========================================
-        // LOGIKA REGROUPING CHECKBOX
-        // ==========================================
+        // Checkbox Regrouping
         const regroupingCheckbox = document.getElementById('regrouping');
         const keteranganContainer = document.getElementById('keteranganContainer');
         const keteranganInput = document.getElementById('keterangan');
@@ -509,9 +598,7 @@
             }
         });
 
-        // ==========================================
-        // LOGIKA MODAL PESAN
-        // ==========================================
+        // Modal Feedback
         const modal = document.getElementById('customModal');
         const modalCard = document.getElementById('modalCard');
         const modalTitle = document.getElementById('modalTitle');
@@ -552,9 +639,7 @@
             }, 300);
         }
 
-        // ==========================================
-        // LOGIKA KONFIRMASI DATA
-        // ==========================================
+        // Modal Konfirmasi
         const confirmModal = document.getElementById('confirmModal');
         const confirmCard = document.getElementById('confirmCard');
         const form = document.getElementById('pppkForm');
@@ -610,9 +695,7 @@
             showConfirmModal();
         });
 
-        // ==========================================
-        // PROSES SIMPAN / UPDATE DATA KE GAS
-        // ==========================================
+        // Simpan Data
         function processSimpanData() {
             const btnProses = document.getElementById('btnProsesSimpan');
             const btnProsesText = document.getElementById('btnProsesText');
@@ -634,7 +717,7 @@
                     if (result && result.status === 'success') {
                         const title = (currentMode === 'update') ? 'Berhasil Diperbarui!' : 'Berhasil Disimpan!';
                         const msg = (currentMode === 'update') 
-                            ? 'Perubahan data PPPK berhasil diperbarui pada Spreadsheet.' 
+                            ? 'Perubahan data PPPK berhasil disimpan ke Spreadsheet.' 
                             : 'Data PPPK baru telah berhasil disimpan ke Spreadsheet.';
                         showModal('success', title, msg);
                         form.reset();
@@ -644,14 +727,14 @@
                             document.getElementById('searchFeedback').classList.add('hidden');
                         }
                     } else {
-                        showModal('error', 'Gagal Memproses', (result && result.message) ? result.message : 'Terjadi kesalahan saat memproses data.');
+                        showModal('error', 'Gagal Memproses', (result && result.message) ? result.message : 'Terjadi kendala pada spreadsheet.');
                     }
                 }, 400);
             })
             .catch(error => {
                 closeConfirmModal();
                 setTimeout(() => {
-                    showModal('error', 'Terjadi Kesalahan', 'Gagal menghubungi server Google Apps Script. Pastikan koneksi internet lancar.');
+                    showModal('error', 'Terjadi Kesalahan', 'Gagal menghubungi server Google Apps Script.');
                 }, 400);
                 console.error('Error!', error);
             })
